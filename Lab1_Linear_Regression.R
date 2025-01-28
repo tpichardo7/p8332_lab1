@@ -47,7 +47,7 @@ library(dplyr) # dplyr is a package for data manipulation
 # check the intro_to_R.docx document if you have difficulty finding the 
 # file path for your computer
 
-file_path <- "/Users/yukilow/Desktop/AAMEHS/lab_1/Lab1_2010_County_Data.csv"
+county_data = "/Users/tamarapichardo/Desktop/p8332_lab1/data/Lab1_2010_County_Data.csv"
 
 ####*************************
 #### 1: Examine Data    #####
@@ -55,7 +55,7 @@ file_path <- "/Users/yukilow/Desktop/AAMEHS/lab_1/Lab1_2010_County_Data.csv"
 
 # Read in data 
 
-dta <- read_csv(file_path)
+dta = read_csv(file = "./data/Lab1_2010_County_Data.csv")
 
 # read_csv() is a bit faster than read.csv, and has more predictable defaults. 
 # even RStudio uses read_csv as the default
@@ -69,7 +69,7 @@ dta <- read_csv(file_path)
 
 # unlike SAS, R is case sensitive 
 
-dim(Dta)
+dim(dta)
 dim(dta)
 
 # Examine environment
@@ -139,21 +139,21 @@ length(dta$AvePM)
 # R will assume that AvePM is its own object in the environment 
 # and will not be able to find it.
 
-mode(AvePM)
+mode(dta$AvePM)
 
 # We can extract dataframe values based on their row+column position. 
-# value <- dataframe[row, column]
+# value = dataframe[row, column]
 
 dta[1,2]
 
 # We can also extract rows or columns this way.
 
-row1    <- dta[1, ]
-column1 <- dta[ ,1]
+row1    = dta[1, ]
+column1 = dta[ ,1]
 
 # We can create new columns by assigning them. 
 
-dta$AveBMI.sq <- dta$AveBMI * dta$AveBMI 
+dta$AveBMI.sq = dta$AveBMI * dta$AveBMI 
 
 # Check for the new column 
 
@@ -365,7 +365,7 @@ lines(density(dta$AveBMI, na.rm = TRUE), col = "red")
 # We see that there is one county with very high AveBMI. 
 # We can look at the data and see which observation has the highest BMI.
 
-LargestBMI <- dta[dta$AveBMI == max(dta$AveBMI),]
+LargestBMI = dta[dta$AveBMI == max(dta$AveBMI),]
 
 # 4c Plot correlation
 # Let's take a look at the correlation between BMI and PM2.5. 
@@ -397,7 +397,7 @@ plot(x = dta$AvePM,
 # A) What is the dependent variable? What are the independent variables? 
 ##*****************************************************************## 
 
-mod <- lm(AveBMI ~ AvePM + PerBlack + PerLatinx + PerAsianAm + 
+mod = lm(AveBMI ~ AvePM + PerBlack + PerLatinx + PerAsianAm + 
           MedHInc + MedHVal + LTHS + FemaleUnemp + MaleUnemp + ClimateRegion, 
           data = dta, 
           na.action = na.omit)
@@ -449,10 +449,10 @@ summary(mod)$coefficients[2,1]
 # 6d Calculate confidence intervals
 # We can use the standard errors to calculate 95% confidence intervals
 
-Beta.pm.fit <- summary(mod)$coefficients[2,1]
-Beta.pm.se  <- summary(mod)$coefficients[2,2]
-Beta.pm.lci <- Beta.pm.fit - 1.96 * Beta.pm.se
-Beta.pm.uci <- Beta.pm.fit + 1.96 * Beta.pm.se
+Beta.pm.fit = summary(mod)$coefficients[2,1]
+Beta.pm.se  = summary(mod)$coefficients[2,2]
+Beta.pm.lci = Beta.pm.fit - 1.96 * Beta.pm.se
+Beta.pm.uci = Beta.pm.fit + 1.96 * Beta.pm.se
 
 ##** Class Question **##
 # A) What is the association between PM2.5 and BMI? 
@@ -468,18 +468,18 @@ Beta.pm.uci <- Beta.pm.fit + 1.96 * Beta.pm.se
 # Sometimes it is useful to extract the whole object as a dataframe 
 
 # we can write code to extract it ourselves
-my.coeff <- summary(mod)$coefficients
+my.coeff = summary(mod)$coefficients
 # or
-my.coeff <- data.frame(summary(mod)$coefficients)
-names(my.coeff) <- c("est", "sterr", "tval", "pval")
+my.coeff = data.frame(summary(mod)$coefficients)
+names(my.coeff) = c("est", "sterr", "tval", "pval")
 
 # we can also use the broom package to extract these model objects as a dataframe 
 
 # install.packages("broom")
 library(broom)
 
-mod.tidy    <- tidy(mod)
-modfit.tidy <- glance(mod)
+mod.tidy    = tidy(mod)
+modfit.tidy = glance(mod)
 
 # note that broom does not work for every type of statistical model.
 
@@ -488,8 +488,8 @@ modfit.tidy <- glance(mod)
 # we can simply plot straight lines with slope = coefficient 
 # The y-axis is the change in BMI relative to zero PM2.5
 par(mfrow=c(1,1))
-AvePM.range <- c(min(dta$AvePM): max(dta$AvePM))
-ChangeBMI <- AvePM.range * Beta.pm.fit
+AvePM.range = c(min(dta$AvePM): max(dta$AvePM))
+ChangeBMI = AvePM.range * Beta.pm.fit
 plot(AvePM.range, ChangeBMI , 
      xlim = c(0, max(dta$AvePM)),
      ylim = c(0, max(dta$AvePM) * Beta.pm.uci), 
@@ -550,8 +550,8 @@ plot(mod)
 # 7c.i get the residuals and plot against fitted
 
 par(mfrow=c(2,2))
-FittedValues <- fitted(mod)    # or FittedValues <- mod$fitted.values
-Residuals    <- residuals(mod) # or Residuals    <- mod$residuals
+FittedValues = fitted(mod)    # or FittedValues = mod$fitted.values
+Residuals    = residuals(mod) # or Residuals    = mod$residuals
 plot(FittedValues, Residuals, main = "Residuals Vs Fitted")    
 
 # 7c.ii QQ plot
@@ -561,14 +561,14 @@ qqline(Residuals)
 
 # 7c.iii get the square root standardized residuals and plot against fitted
 
-RootStandardResiduals <- sqrt(abs(scale(resid(mod))))
+RootStandardResiduals = sqrt(abs(scale(resid(mod))))
 plot(FittedValues, RootStandardResiduals, main = "Scale-Location")
 
 # 7c.iv get the leverage and plot against standardized residuals
 # leverage is how much data point deviates from the general trend
 
-Leverage          <- hat(model.matrix(mod))
-StandardResiduals <- scale(resid(mod))
+Leverage          = hat(model.matrix(mod))
+StandardResiduals = scale(resid(mod))
 plot(Leverage, StandardResiduals, las = 1, xlab = "Leverage", 
      ylab = "Standardized Residuals", main = "Residuals vs Leverage")
 abline(h = 0, col = "red")
@@ -626,11 +626,11 @@ dta[169,]
 
 # 7f.ii Remove the potential outliers
 
-dta.noOutliers <- dta[-c(169, 154),]
+dta.noOutliers = dta[-c(169, 154),]
 
 # 7f.iii Fit regression model
 
-mod.noOutliers <- lm(AveBMI ~ AvePM + PerBlack + PerLatinx + PerAsianAm + 
+mod.noOutliers = lm(AveBMI ~ AvePM + PerBlack + PerLatinx + PerAsianAm + 
                        MedHInc + MedHVal + LTHS + FemaleUnemp + MaleUnemp + 
                      ClimateRegion, 
                      data = dta.noOutliers, na.action = na.omit)
@@ -646,8 +646,8 @@ summary(mod.noOutliers)
 
 # 7f.v Assess influence on PM2.5 coefficient
 
-Beta.pm.mod            <- summary(mod)$coefficients[2,1]
-Beta.pm.mod.noOutliers <- summary(mod.noOutliers)$coefficients[2,1]
+Beta.pm.mod            = summary(mod)$coefficients[2,1]
+Beta.pm.mod.noOutliers = summary(mod.noOutliers)$coefficients[2,1]
 
 100 * (Beta.pm.mod - Beta.pm.mod.noOutliers) / Beta.pm.mod.noOutliers
 
@@ -672,7 +672,7 @@ Beta.pm.mod.noOutliers <- summary(mod.noOutliers)$coefficients[2,1]
 
 # 8a Fit regression model with interaction term
 
-mod.interaction <- lm(AveBMI ~ AvePM*ClimateRegion + PerBlack + PerLatinx + PerAsianAm + 
+mod.interaction = lm(AveBMI ~ AvePM*ClimateRegion + PerBlack + PerLatinx + PerAsianAm + 
                         MedHInc + MedHVal + LTHS + FemaleUnemp + MaleUnemp, 
                       data = dta.noOutliers, na.action = na.omit)
 
@@ -698,13 +698,13 @@ summary(mod.interaction)
 
 # 8c.i Extract coefficents and covariances
 # here we create tables of coefficients and covariance
-coef.mat <- summary(mod.interaction)$coefficients
-var.mat  <- vcov(mod.interaction)
+coef.mat = summary(mod.interaction)$coefficients
+var.mat  = vcov(mod.interaction)
 
 # 8c.ii Compute total term for within-region association
 # sum of the term in the reference region plus the term for Upper Midwest
 
-beta.PM_upper_midwest <- coef.mat["AvePM",1] + 
+beta.PM_upper_midwest = coef.mat["AvePM",1] + 
                          coef.mat["AvePM:ClimateRegionupper_midwest",1]
 
 # 8c.iii Compute variance of within-region association 
@@ -713,19 +713,19 @@ beta.PM_upper_midwest <- coef.mat["AvePM",1] +
 # Var(Beta1 + Beta3) = Var(Beta1) + Var(Beta3) + CoVar(Beta1, Beta3) + CoVar(Beta3, Beta1)
 # Var(Beta1 + Beta3) = Var(Beta1) + Var(Beta3) + 2*CoVar(Beta1, Beta3) 
 
-var.PM_upper_midwest  <- var.mat["AvePM", "AvePM"] + 
+var.PM_upper_midwest  = var.mat["AvePM", "AvePM"] + 
   var.mat["AvePM:ClimateRegionupper_midwest", "AvePM:ClimateRegionupper_midwest"] +
   2*var.mat["AvePM", "AvePM:ClimateRegionupper_midwest"]
 
-se.PM_upper_midwest  <- sqrt(abs(var.PM_upper_midwest))
+se.PM_upper_midwest  = sqrt(abs(var.PM_upper_midwest))
 
 # 8c.iv Compute confidence intervals 
 # using ste for within-region association
 
-lci.PM_upper_midwest <- beta.PM_upper_midwest - 1.96*se.PM_upper_midwest
-uci.PM_upper_midwest <- beta.PM_upper_midwest + 1.96*se.PM_upper_midwest
+lci.PM_upper_midwest = beta.PM_upper_midwest - 1.96*se.PM_upper_midwest
+uci.PM_upper_midwest = beta.PM_upper_midwest + 1.96*se.PM_upper_midwest
 
-UMWval <- paste(round(beta.PM_upper_midwest, 3), " (95% CI: ", round(lci.PM_upper_midwest, 3), ", ", 
+UMWval = paste(round(beta.PM_upper_midwest, 3), " (95% CI: ", round(lci.PM_upper_midwest, 3), ", ", 
                round(uci.PM_upper_midwest, 3), ")", sep = "")
 UMWval
 
@@ -746,7 +746,7 @@ anova(mod.noOutliers, mod.interaction, test="LRT")
 # 8e Fit stratified model
 # we can isolate our model to one strata of the data with the subset command 
 # we could fit a stratified model for each ClimateRegion
-mod.stratified <- lm(AveBMI ~ AvePM + PerBlack + PerLatinx + PerAsianAm + 
+mod.stratified = lm(AveBMI ~ AvePM + PerBlack + PerLatinx + PerAsianAm + 
                        MedHInc + MedHVal + LTHS + FemaleUnemp + MaleUnemp, 
            data = dta.noOutliers, na.action = na.omit,
            subset = (ClimateRegion == "upper_midwest"))
@@ -789,8 +789,8 @@ summary(mod.stratified)
 # What does an unadjusted model look like? 
 
 # You will need to make a categorical variable for male unemployment. 
-# MedianMaleEmp <- median(dta$MaleUnemp, na.rm = TRUE)
-# dta$MaleUnempAboveMedian <- if_else(dta$MaleUnemp > MedianMaleEmp, "Above Median", "Below Median")
+# MedianMaleEmp = median(dta$MaleUnemp, na.rm = TRUE)
+# dta$MaleUnempAboveMedian = if_else(dta$MaleUnemp > MedianMaleEmp, "Above Median", "Below Median")
 ####*******************************************
 
 
@@ -805,7 +805,7 @@ summary(mod.stratified)
 #### 10: Data Manipulation    #####
 ####*******************************
 
-dta <- read_csv(paste0(DataPath, "county_pm_bmi_census.csv"))
+dta = read_csv(file = "./data/county_pm_bmi_census.csv")
 
 # often our raw data aren't ready for analysis, 
 # and we need to remove observations, create variables, 
@@ -814,7 +814,7 @@ dta <- read_csv(paste0(DataPath, "county_pm_bmi_census.csv"))
 # 10a Creating Columns 
 # we can create new columns by assigning them 
 
-dta$AveBMIsq <- dta$AveBMI * dta$AveBMI 
+dta$aveBMIsq = dta$aveBMI * dta$aveBMI 
 
 # the dplyr package is a popular package for manipulating data
 # dplyr is part of a larger family of packages called the tidyverse 
@@ -826,7 +826,7 @@ library(dplyr)
 
 # in dplyr, we use mutate() to create new variables 
 
-dta1 <- mutate(dta, AveBMIsq = AveBMI*AveBMI)
+dta1 = mutate(dta, aveBMIsq = aveBMI*aveBMI)
 
 # within mutate(), 
 # the function knows that you are referring to columns within dta, 
@@ -835,7 +835,7 @@ dta1 <- mutate(dta, AveBMIsq = AveBMI*AveBMI)
 # dplyr automatically does operations row by row 
 # so adding two columns a and b would create a third column c with values 
 # c1 = a1+ b1, c2=a2+b2, c3 = a3+b3
-# dta1 <- mutate(dta1, c = a + b)
+# dta1 = mutate(dta1, c = a + b)
 
 # We often create new dataframes when manipulating data 
 # It is important to use consistent naming 
@@ -854,7 +854,7 @@ dta1 <- mutate(dta, AveBMIsq = AveBMI*AveBMI)
 
 # if_else()
 # if_else(logical statement, value if true, value if false)
-dta2 <- mutate(dta1, AveObese = if_else(AveBMI >=30, "average obese", "average not obese"))
+dta2 = mutate(dta1, aveObese = if_else(aveBMI >=30, "average obese", "average not obese"))
 
 # the cut() function 
 # the "cut()" function will divide a variable into a set number of levels. 
@@ -867,15 +867,15 @@ dta2 <- mutate(dta1, AveObese = if_else(AveBMI >=30, "average obese", "average n
 # the arguement include.lowest = TRUE will include the lowest value in the lowest bin 
 # we almost always want to inlcude the lowest value. 
 
-dta3 <- mutate(dta2, AveBMI5 = cut(AveBMI, 5), include.lowest=TRUE)
+dta3 = mutate(dta2, aveBMI5 = cut(aveBMI, 5), include.lowest=TRUE)
 
 # Another way to cut your data is to specify cut points 
 # that are quintiles of AveBMI. 
 # The categories have equal numbers of subjects, 
 # but are not equally spaced on the AveBMI axis.  
 
-dta2$AveBMI5 <- cut(dta2$AveBMI, quantile(dta$AveBMI, c(0,.2,.4,.6,.8,1)), include.lowest=TRUE)
-dta3         <- mutate(dta2, AveBMI5 =  cut(AveBMI, quantile(AveBMI, c(0,.2,.4,.6,.8,1)), include.lowest=TRUE))
+dta2$aveBMI5 = cut(dta2$aveBMI, quantile(dta$aveBMI, c(0,.2,.4,.6,.8,1)), include.lowest=TRUE)
+dta3         = mutate(dta2, aveBMI5 =  cut(aveBMI, quantile(aveBMI, c(0,.2,.4,.6,.8,1)), include.lowest=TRUE))
 
 # Note that here in line 152 I create a new dataframe, dta3, 
 # and rewrite in in line 158 
@@ -885,35 +885,35 @@ dta3         <- mutate(dta2, AveBMI5 =  cut(AveBMI, quantile(AveBMI, c(0,.2,.4,.
 
 # dplyr provides a special syntax to pass along objects
 
-dta4 <- dta3 %>% mutate(AveBMIsq = AveBMI*AveBMI)
+dta4 = dta3 %>% mutate(aveBMIsq = aveBMI*aveBMI)
 
 # same result as
-dta4.a <- mutate(dta3, AveBMIsq = AveBMI*AveBMI)
+dta4.a = mutate(dta3, aveBMIsq = aveBMI*aveBMI)
 
 # these pipes can be connected, like this 
 
-dta4 <- dta3 %>% mutate(AveBMIsq = AveBMI*AveBMI) %>% 
-  mutate(AveObese = if_else(AveBMI >=30, "average obese", "average not obese"))
+dta4 = dta3 %>% mutate(aveBMIsq = aveBMI*aveBMI) %>% 
+  mutate(aveObese = if_else(aveBMI >=30, "average obese", "average not obese"))
 
 # 10b Subsetting Data 
 # we can use the filter() command to keep only rows/observations we are interested in 
 
-dta.obese <- dta4 %>% filter(AveObese == "average obese")
+dta.obese = dta4 %>% filter(aveObese == "average obese")
 
 # filter() can accept a range of logical statements 
 
-dta.obese2 <- dta4 %>% filter(AveBMI >=30)
+dta.obese2 = dta4 %>% filter(aveBMI >=30)
 
 # similarly, we can use the select() command to keep only 
 # the columns/variables we are interested in 
 
-dta.obese3 <- dta4 %>% select(FIPS, AveObese)
+dta.obese3 = dta4 %>% select(fips, aveObese)
 
 # we can also use select()with the minus sign to remove columns
 # here we are removing these three spatial variables which 
 # helped us connect the pm and county data, but are no longer necesary 
 
-dta5 <- dta4 %>% select(-Area, -Perimeter, -Geometry)
+dta5 = dta4 %>% select(-AREA, -PERIMETER, -geometry)
 
 # 10c Combining Data 
 # we can combine data with the join commands 
@@ -921,11 +921,11 @@ dta5 <- dta4 %>% select(-Area, -Perimeter, -Geometry)
 # the different ways of combining data. 
 # here we will use left_join() to add unemployment data from the 2010 US census 
 
-unemp <- read.csv(paste0(DataPath, "2010_census_unemployment_data.csv"))
+unemp = read.csv(file = "./data/2010_census_unemployment_data.csv")
 
 # we join by FIPS codes, so we combine rows that have matching FIPS
 
-dta6 <- left_join(dta5, unemp, by = "FIPS")
+dta6 = left_join(dta5, unemp, by = "fips")
 
 # look at the new dataframe... does it contain the unemployment variables? 
 
@@ -942,25 +942,25 @@ View(dta6)
 
 # for example, inner_join() only keeps rows that do have a match for FIPS. 
 
-dta.inner <- dta5 %>% inner_join( unemp, by = "FIPS")
+dta.inner = dta5 %>% inner_join( unemp, by = "FIPS")
 
 # Here is another example of a join that is part of a pipe 
 # I will cover this sort of code in the data manipulation workshop 
 
-NOAAClimateRegions <- read_csv(paste0(DataPath, "noaa_climate_regions_FIPS.csv"))
+NOAAClimateRegions = read_csv(paste0(DataPath, "noaa_climate_regions_FIPS.csv"))
 
 # join 
-dta7 <- dta6 %>% 
+dta7 = dta6 %>% 
   mutate(state_fips_code = stringr::str_sub(FIPS,0,2)) %>% 
   left_join(NOAAClimateRegions, by = "state_fips_code") %>% 
   select(-state_fips_code)
 
 # We must chage the mode of the column to make them compatiable 
 
-NOAAClimateRegions <- NOAAClimateRegions %>% 
+NOAAClimateRegions = NOAAClimateRegions %>% 
   mutate(state_fips_code = as.character(state_fips_code))
 
-dta7 <- dta6 %>% 
+dta7 = dta6 %>% 
   mutate(state_fips_code = stringr::str_sub(FIPS,0,2)) %>% 
   left_join(NOAAClimateRegions, by = "state_fips_code") %>% 
   select(-state_fips_code)
@@ -992,8 +992,8 @@ rm( dta, dta.inner, dta.obese, dta.obese2, dta.obese3,
 # 11a Means
 # we can compute the mean of any vector 
 
-MeanPM1 <- mean(dta7$AvePM)
-MeanPM2 <- dta7 %>% summarize(meanPM = mean(AvePM))
+MeanPM1 = mean(dta7$AvePM)
+MeanPM2 = dta7 %>% summarize(meanPM = mean(AvePM))
 
 # what is the different between MeanPM1 and MeanPM2? 
 
@@ -1003,13 +1003,13 @@ class(MeanPM2)
 # 11b Medians 
 # we can compute the median of any vector 
 
-MedianPM1 <- median(dta7$AvePM)
-MedianPM2 <- dta7 %>% summarize(medianPM = median(AvePM))
+MedianPM1 = median(dta7$AvePM)
+MedianPM2 = dta7 %>% summarize(medianPM = median(AvePM))
 
 # 11c Quantiles 
 
-QuantilePM1 <- quantile(dta7$AvePM, c(0.1,0.9))
-QuantilePM2 <- dta7 %>% summarize(tenthPM = quantile(AvePM, 0.1),
+QuantilePM1 = quantile(dta7$AvePM, c(0.1,0.9))
+QuantilePM2 = dta7 %>% summarize(tenthPM = quantile(AvePM, 0.1),
                                  ninetithPM = quantile(AvePM, 0.9))
 
 # do two methods yield the same results? 
@@ -1037,7 +1037,7 @@ table(dta7$AveObese) # table is more useful for character variables
 # we can rewrite the AveObese variable as a factor
 # the results are more useful for factors
 
-dta8 <- dta7 %>% mutate(AveObese = as.factor(AveObese))
+dta8 = dta7 %>% mutate(AveObese = as.factor(AveObese))
 summary(dta8$AveObese)
 
 # you can get the summary of every variable in a dataframe 
@@ -1051,7 +1051,7 @@ table(dta8$AveObese, dta8$State)
 
 # we can save the results 
 
-ObesityByState1 <- table(dta8$AveObese, dta8$State)
+ObesityByState1 = table(dta8$AveObese, dta8$State)
 
 # One advantage of these commands is that they are simple - 
 # you don't have to write as much as with the dplyr method 
@@ -1067,13 +1067,13 @@ dta8 %>% group_by(State, AveObese) %>%
 
 # we can save the results 
 
-ObesityByState2 <- dta8 %>% group_by(State, AveObese) %>%
+ObesityByState2 = dta8 %>% group_by(State, AveObese) %>%
   summarize(Count = n())
 
 # What is the highest county-average PM in each state? 
 # (among the counties measured!) 
 
-PM25ByState <- dta8 %>% group_by(State) %>% 
+PM25ByState = dta8 %>% group_by(State) %>% 
   summarize(MaxPM = max(AvePM))
 
 # 11e  Pipes 
@@ -1082,7 +1082,7 @@ PM25ByState <- dta8 %>% group_by(State) %>%
 
 # what is the average PM and BMI within Pennsylvania? 
 
-MeanPM_MeanBMI <- dta8 %>% filter(State == "PA") %>% 
+MeanPM_MeanBMI = dta8 %>% filter(State == "PA") %>% 
   summarize(meanPM = mean(AvePM), 
             meanBMI = mean(AveBMI))
 
@@ -1113,9 +1113,9 @@ cor(dta8$AveBMI, dta8$AvePM, method = "spearman")
 # in R, NA refers to missing data. 
 # you can check whether a value is missing with is.na() 
 
-a <- NA
+a = NA
 is.na(a) 
-a <- c(1,NA,2)
+a = c(1,NA,2)
 is.na(a)
 
 # sometimes you need to tell functions to ignore or exclude missing values
@@ -1130,7 +1130,7 @@ cor(dta8$FemaleUnemp, dta8$MaleUnemp,use="complete")
 
 # also, you can use objects inside of commands 
 
-a   <- 100
-dta8 <- dta8 %>% mutate(AveBMI_rescaled = AveBMI * a)
+a   = 100
+dta8 = dta8 %>% mutate(AveBMI_rescaled = AveBMI * a)
 
 #############################################
